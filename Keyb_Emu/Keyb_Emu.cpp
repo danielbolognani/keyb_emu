@@ -3,6 +3,7 @@
 
 #ifdef _WINDOWS
 #include <windows.h>
+#include <map>
 #else
 #include <stdlib.h>
 #include <unistd.h>
@@ -16,7 +17,6 @@
 #include <X11/extensions/XTest.h>
 #include <linux/input.h>
 #include <linux/uinput.h>
-#include <map>
 #endif
 #include "Keyb_Emu.h"
 
@@ -28,12 +28,12 @@ bool bSend;
 int gSleep;
 
 #ifndef _WINDOWS
-enum class WPARAM {
-  WM_KEYUP = 0,
-  WM_KEYDOWN = 1,
-  WM_KEYREPEAT = 2,
-  WM_SYSKEYUP = 10,
-  WM_SYSKEYDOWN = 11,
+
+#define  WM_KEYUP       0
+#define  WM_KEYDOWN     1
+#define  WM_KEYREPEAT   2
+#define  WM_SYSKEYUP    10
+#define  WM_SYSKEYDOWN  11
 };
 
 static const char *const evval[3] = {
@@ -206,17 +206,17 @@ int LowLevelKeyboardProc(int nCode, WPARAM wParam)
 #endif
     switch (wParam)
     {
-    case WPARAM::WM_KEYDOWN:
-    case WPARAM::WM_SYSKEYDOWN:
-    case WPARAM::WM_KEYUP:
-    case WPARAM::WM_SYSKEYUP:
+    case WM_KEYDOWN:
+    case WM_SYSKEYDOWN:
+    case WM_KEYUP:
+    case WM_SYSKEYUP:
 #ifdef _WINDOWS
        PKBDLLHOOKSTRUCT p = (PKBDLLHOOKSTRUCT)lParam;
        if (fEatKeystroke = (p->vkCode == keyCode)) {     //redirect a to b
 #else
        if (nCode == keyCode) {
 #endif
-         if ((wParam == WPARAM::WM_KEYUP) || (wParam == WPARAM::WM_SYSKEYUP))
+         if ((wParam == WM_KEYUP) || (wParam == WM_SYSKEYUP))
          {
            if (!bSend){
              std::cout << "Shortcut recognized, sending buffer to keyboard" << std::endl;

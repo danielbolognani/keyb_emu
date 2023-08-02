@@ -1,6 +1,7 @@
 ﻿# CMakeList.txt : CMake project for Keyb_Emu, include source and define
 # project specific logic here.
 #
+project(Keyb_Emu)
 cmake_minimum_required (VERSION 3.4)
 
 # Add source to this project's executable.
