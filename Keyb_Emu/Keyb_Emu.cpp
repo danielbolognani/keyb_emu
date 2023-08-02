@@ -3,7 +3,6 @@
 
 #ifdef _WINDOWS
 #include <windows.h>
-#include <map>
 #else
 #include <stdlib.h>
 #include <unistd.h>
@@ -18,6 +17,7 @@
 #include <linux/input.h>
 #include <linux/uinput.h>
 #endif
+#include <map>
 #include "Keyb_Emu.h"
 
 using namespace std;
@@ -34,7 +34,7 @@ int gSleep;
 #define  WM_KEYREPEAT   2
 #define  WM_SYSKEYUP    10
 #define  WM_SYSKEYDOWN  11
-};
+
 
 static const char *const evval[3] = {
     "RELEASED",
@@ -196,7 +196,7 @@ void sendKeyEvent(std::string keystrokes)
 #ifdef _WINDOWS
 LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 #else
-int LowLevelKeyboardProc(int nCode, WPARAM wParam)
+int LowLevelKeyboardProc(int nCode, int wParam)
 #endif
 {
   bool fEatKeystroke = false;
@@ -425,7 +425,7 @@ int main(int argc, char **argv)
       break;
     }
     if (ev.type == EV_KEY && ev.value >= 0 && ev.value <= 2) {
-      LowLevelKeyboardProc(ev.code, (WPARAM)ev.value);
+      LowLevelKeyboardProc(ev.code, ev.value);
     }
   }
   std::cout << "Error " << strerror(errno) << "." << std::endl;
