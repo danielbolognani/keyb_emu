@@ -14,7 +14,6 @@ LINK_FLAGS /SUBSYSTEM:CONSOLE
 endif (MSVC)
 
 if (UNIX)
-TARGET_LINK_LIBRARIES(Keyb_Emu X11 Xtst)
 target_compile_features(Keyb_Emu PUBLIC cxx_std_17)
 endif (UNIX)
 
